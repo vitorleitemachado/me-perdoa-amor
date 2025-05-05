@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Me Perdoa, Meu Amor?</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -9,12 +10,15 @@
       font-family: 'Poppins', sans-serif;
       text-align: center;
       background-color: #fff0f5;
-      padding: 50px;
+      padding: 20px;
+      margin: 0;
+      overflow-x: hidden;
     }
     h1 {
       color: #ff69b4;
-      font-size: 2.5em;
+      font-size: 2em;
       margin-bottom: 20px;
+      word-wrap: break-word;
     }
     .button {
       padding: 15px 30px;
@@ -49,6 +53,17 @@
     @keyframes fall {
       0% { transform: translateY(-100px); opacity: 1; }
       100% { transform: translateY(100vh); opacity: 0; }
+    }
+
+    /* Responsividade */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5em;
+      }
+      .button {
+        font-size: 16px;
+        padding: 12px 25px;
+      }
     }
   </style>
 </head>

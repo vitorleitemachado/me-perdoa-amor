@@ -1,119 +1,163 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Me Perdoa, Meu Amor?</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nossos Votos no Universo</title>
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
-      text-align: center;
-      background-color: #fff0f5;
-      padding: 20px;
       margin: 0;
+      font-family: 'Georgia', serif;
+      background: black;
+      color: white;
       overflow-x: hidden;
     }
-    h1 {
-      color: #ff69b4;
-      font-size: 2em;
-      margin-bottom: 20px;
-      word-wrap: break-word;
-    }
-    .button {
-      padding: 15px 30px;
-      margin: 10px;
-      font-size: 18px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .yes {
-      background-color: #ff1493;
-      color: white;
-    }
-    .no {
-      background-color: #add8e6;
-      color: black;
-    }
-    .button:hover {
-      transform: scale(1.05);
-    }
-    #response {
-      margin-top: 40px;
-      font-size: 22px;
-      color: #ff1493;
-      margin-bottom: 40px; /* Aumenta o espaço entre a frase e os botões */
-    }
-    .emoji {
-      font-size: 2em;
-      animation: fall 3s linear infinite;
+    canvas {
       position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
     }
-    @keyframes fall {
-      0% { transform: translateY(-100px); opacity: 1; }
-      100% { transform: translateY(100vh); opacity: 0; }
+    .text-container {
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+      text-align: center;
     }
-
-    /* Responsividade */
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 1.5em;
-      }
-      .button {
-        font-size: 16px;
-        padding: 12px 25px;
-      }
+    .line {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+      line-height: 1.6;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .line.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .typewriter span {
+      display: inline-block;
+      border-right: 2px solid rgba(255,255,255,0.75);
+      white-space: nowrap;
+      overflow: hidden;
+      font-size: 1.2rem;
+      animation: typing 5s steps(60, end), blink .75s step-end infinite;
+    }
+    .pretypewriter span {
+      display: inline-block;
+      border-right: 2px solid rgba(255,255,255,0.75);
+      white-space: nowrap;
+      overflow: hidden;
+      font-size: 2rem;
+      animation: pretyping 8s steps(60, end), blink .75s step-end infinite;
+    }
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+    @keyframes pretyping {
+      from { width: 0 }
+      to { width: 100% }
+    }
+    @keyframes blink {
+      50% { border-color: transparent }
+    }
+    .fade-stars {
+      animation: fadeStars 20s infinite alternate ease-in-out;
+    }
+    @keyframes fadeStars {
+      0% { opacity: 0.8; }
+      100% { opacity: 0.4; }
     }
   </style>
 </head>
 <body>
-
-  <h1>Você perdoa o amor da sua vida pela merda que ele fez?</h1>
-  <button class="button yes" onclick="respostaSim()">SIM</button>
-  <button class="button no" onclick="respostaNao()">NÃO</button>
-
-  <div id="response"></div>
-  <div id="memories-button"></div>
-
+  <canvas id="stars" class="fade-stars"></canvas>
+  <div class="text-container">
+    <div class="pretypewriter">
+      <span>Eu escrevi algo bem brega meu amor...</span>
+    </div>
+    <div class="typewriter">
+      <span>
+        Às vezes eu me pego pensando no que colocar nos votos de casamento…
+      </span>
+    </div>
+    <div id="text"></div>
+    <audio id="bgm" loop autoplay>
+      <source src="espaco.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="blip">
+      <source src="blip.mp3" type="audio/mpeg">
+    </audio>
+  </div>
   <script>
-    function respostaSim() {
-      document.getElementById("response").innerText = "AAAAAA ELE TÁ MUITO FELIZ ❤️❤️❤️";
-      criarEmojis("❤️", 50);
-      const btn = document.createElement("a");
-      btn.href = "https://wa.me/31975372508?text=eu%20te%20perdoo%20meu%20amor";
-      btn.className = "button yes";
-      btn.innerText = "Manda uma mensagem pro seu amor";
-      btn.target = "_blank";
-      document.getElementById("memories-button").innerHTML = "";
-      document.getElementById("memories-button").appendChild(btn);
-    }
+    const text = [
+      "No que eu vou ler pra você enquanto te vejo em um belo terno, parado bem ali na minha frente.",
+      "Com nossos amigos e família assistindo…",
+      "Me dá um frio na barriga.",
+      "O que dizer? Pra onde olhar sem me perder nos seus olhos…",
+      "Como controlar o choro sem parecer que meu corpo todo treme só por te ver sorrindo?",
+      "E então eu olho pro céu, e penso...",
+      "A vastidão do universo, com suas leis complexas, suas dobras no tempo e suas partículas dançando desde o Big Bang...",
+      "É tudo tão grandioso, tão infinito... e ainda assim, de todas as possibilidades cósmicas, eu encontrei você.",
+      "Se isso aqui for uma simulação, então me deixa dizer:",
+      "Você é a parte mais real dela. A certeza mais improvável.",
+      "Talvez tudo seja mesmo código. Mas você é aquele bug lindo no sistema, aquele pixel que brilha diferente...",
+      "...que faz tudo fazer sentido.",
+      "Eu escolheria te encontrar em qualquer linha do tempo.",
+      "Em qualquer dimensão. Em qualquer universo paralelo.",
+      "Porque em todos eles, meu amor, você seria meu ponto fixo. Minha constante. Minha singularidade."
+    ];
 
-    function respostaNao() {
-      document.getElementById("response").innerText = "POR FAVOR ELE TE AMA MUITO 😭😭😭";
-      criarEmojis("😭", 50);
-      const btn = document.createElement("a");
-      btn.href = "https://www.instagram.com/s/aGlnaGxpZ2h0OjE4MDYxMTcwOTE5ODYwNTIw?story_media_id=3348575593845028248&igsh=MWtpeWZrenlsN3Zjag==";
-      btn.className = "button no";
-      btn.innerText = "Várias memórias nossas";
-      btn.target = "_blank";
-      document.getElementById("memories-button").innerHTML = "";
-      document.getElementById("memories-button").appendChild(btn);
-    }
+    let index = 0;
+    const container = document.getElementById("text");
+    const blip = document.getElementById("blip");
 
-    function criarEmojis(emoji, quantidade) {
-      for (let i = 0; i < quantidade; i++) {
-        const e = document.createElement("div");
-        e.className = "emoji";
-        e.style.left = Math.random() * 100 + "vw";
-        e.style.top = "-50px";
-        e.innerText = emoji;
-        document.body.appendChild(e);
-        setTimeout(() => e.remove(), 3000);
+    function showNextLine() {
+      if (index < text.length) {
+        const p = document.createElement("p");
+        p.textContent = text[index++];
+        p.classList.add("line");
+        container.appendChild(p);
+        setTimeout(() => p.classList.add("visible"), 100);
+
+        blip.currentTime = 0;
+        blip.play();
+        setTimeout(showNextLine, 4000);
       }
     }
-  </script>
+    setTimeout(showNextLine, 10000);
 
+    // Estrelas no fundo
+    const canvas = document.getElementById("stars");
+    const ctx = canvas.getContext("2d");
+    let width, height;
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < 150; i++) {
+        const x = Math.random() * width;
+        const y = Math.random() * height;
+        const r = Math.random() * 1.5;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, 2 * Math.PI);
+        ctx.fillStyle = "white";
+        ctx.fill();
+      }
+    }
+
+    resize();
+    drawStars();
+    window.addEventListener("resize", () => {
+      resize();
+      drawStars();
+    });
+  </script>
 </body>
 </html>

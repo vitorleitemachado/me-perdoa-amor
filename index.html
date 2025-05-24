@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Nossos Votos no Universo</title>
   <style>
     body {
@@ -36,29 +36,35 @@
       opacity: 1;
       transform: translateY(0);
     }
-    .typewriter span {
-      display: inline-block;
-      border-right: 2px solid rgba(255,255,255,0.75);
-      white-space: nowrap;
-      overflow: hidden;
-      font-size: 1.2rem;
-      animation: typing 5s steps(60, end), blink .75s step-end infinite;
-    }
+    .typewriter span,
     .pretypewriter span {
       display: inline-block;
-      border-right: 2px solid rgba(255,255,255,0.75);
       white-space: nowrap;
       overflow: hidden;
-      font-size: 2rem;
-      animation: pretyping 8s steps(60, end), blink .75s step-end infinite;
     }
-    @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
+    .pretypewriter span {
+      font-size: 2rem;
+      border-right: 2px solid rgba(255,255,255,0.75);
+      animation: pretyping 8s steps(60, end), blink .75s step-end infinite;
     }
     @keyframes pretyping {
       from { width: 0 }
       to { width: 100% }
+    }
+    .final-names {
+      font-size: 1.5rem;
+      margin-top: 3rem;
+      font-style: italic;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      min-height: 3.5rem;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: none;
+    }
+    .typing-cursor {
+      border-right: 2px solid rgba(255,255,255,0.75);
+      animation: blink .75s step-end infinite;
     }
     @keyframes blink {
       50% { border-color: transparent }
@@ -84,11 +90,15 @@
       </span>
     </div>
     <div id="text"></div>
+    <div id="names">
+      <div id="name1" class="final-names"></div>
+      <div id="name2" class="final-names"></div>
+    </div>
     <audio id="bgm" loop autoplay>
-      <source src="espaco.mp3" type="audio/mpeg">
+      <source src="espaco.mp3" type="audio/mpeg" />
     </audio>
     <audio id="blip">
-      <source src="blip.mp3" type="audio/mpeg">
+      <source src="blip.mp3" type="audio/mpeg" />
     </audio>
   </div>
   <script>
@@ -125,8 +135,88 @@
         blip.currentTime = 0;
         blip.play();
         setTimeout(showNextLine, 4000);
+      } else {
+        showNamesSequence();
       }
     }
+
+    // Digita texto caractere a caractere com cursor animado
+    function typeWriterEffect(text, element, speed = 100) {
+      return new Promise((resolve) => {
+        let i = 0;
+        element.textContent = "";
+        element.classList.add("typing-cursor");
+
+        function type() {
+          if (i < text.length) {
+            element.textContent += text.charAt(i);
+            i++;
+            setTimeout(type, speed);
+          } else {
+            element.classList.remove("typing-cursor");
+            resolve();
+          }
+        }
+        type();
+      });
+    }
+
+    // Apaga texto caractere a caractere com cursor animado
+    function deleteEffect(element, count, speed = 80) {
+      return new Promise((resolve) => {
+        element.classList.add("typing-cursor");
+
+        function del() {
+          if (count > 0) {
+            element.textContent = element.textContent.slice(0, -1);
+            count--;
+            setTimeout(del, speed);
+          } else {
+            element.classList.remove("typing-cursor");
+            resolve();
+          }
+        }
+        del();
+      });
+    }
+
+    async function showNamesSequence() {
+      const name1 = document.getElementById("name1");
+      const name2 = document.getElementById("name2");
+
+      const original1 = "Ramon Carneiro Ambar";
+      const original2 = "Vitor Leite Machado";
+
+      const final1 = "Ramon Ambar Leite";
+      const final2 = "Vitor Leite Ambar";
+
+      // Digita os nomes originais completos
+      await typeWriterEffect(original1, name1, 120);
+      await typeWriterEffect(original2, name2, 120);
+
+      await new Promise(r => setTimeout(r, 1200));
+
+      // Apaga os sobrenomes originais completos (" Carneiro Ambar" no nome1, " Machado" no nome2)
+      // Mas atenção, queremos apagar apenas os sobrenomes antigos para colocar os novos no lugar,
+      // no nome1 vamos apagar " Carneiro Ambar" (note o espaço no início)
+      // no nome2 vamos apagar " Machado" (com espaço)
+
+      // Para nome1:
+      // Apaga " Ambar" primeiro
+      await deleteEffect(name1, " Ambar".length, 80);
+      // Apaga " Carneiro" depois
+      await deleteEffect(name1, " Carneiro".length, 80);
+
+      // Agora digita o sobrenome misturado completo " Ambar Leite"
+      await typeWriterEffect(" Ambar Leite", name1, 120);
+
+      // Para nome2:
+      // Apaga " Machado"
+      await deleteEffect(name2, " Machado".length, 80);
+      // Agora digita " Ambar"
+      await typeWriterEffect(" Ambar", name2, 120);
+    }
+
     setTimeout(showNextLine, 10000);
 
     // Estrelas no fundo
